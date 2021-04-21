@@ -8,7 +8,7 @@ import { Feature } from './feature/feature.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: 'mongodb://localhost/Ebnb',
+      url: 'mongodb://localhost/ebnb',
       synchronize: true,
       useUnifiedTopology: true,
       entities: [Feature],

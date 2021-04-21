@@ -6,7 +6,7 @@ export class Feature {
   _id: string;
 
   @PrimaryColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
