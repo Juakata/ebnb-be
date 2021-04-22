@@ -50,6 +50,9 @@ export class UserService {
   async assignReview(assignReviewInput: AssignReviewInput): Promise<User> {
     const { userId, reviewId } = assignReviewInput;
     const user = await this.userRepository.findOne({ id: userId });
+    if (user.reviews.includes(reviewId)) {
+      throw new ConflictException('User has already this review id');
+    }
     user.reviews = [...user.reviews, reviewId];
     return this.userRepository.save(user);
   }
@@ -57,6 +60,9 @@ export class UserService {
   async assignBooking(assignBookingInput: AssignBookingInput): Promise<User> {
     const { userId, bookingId } = assignBookingInput;
     const user = await this.userRepository.findOne({ id: userId });
+    if (user.bookings.includes(bookingId)) {
+      throw new ConflictException('User has already this booking id');
+    }
     user.bookings.push(bookingId);
     return this.userRepository.save(user);
   }

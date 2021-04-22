@@ -34,7 +34,10 @@ export class SpaceService {
     const space = await this.spaceRepository.findOne({
       id: assignFeaturesToSpace.space_id,
     });
-    space.features = [...space.features, ...assignFeaturesToSpace.features];
+
+    space.features = [
+      ...new Set(...[...space.features, ...assignFeaturesToSpace.features]),
+    ];
     return this.spaceRepository.save(space);
   }
 

@@ -1,5 +1,5 @@
-import { Entity, PrimaryColumn, Column, ObjectIdColumn } from 'typeorm';
-
+import { Entity, PrimaryColumn, Column, ObjectIdColumn, Unique } from 'typeorm';
+@Unique(['name'])
 @Entity()
 export class Feature {
   @ObjectIdColumn()
