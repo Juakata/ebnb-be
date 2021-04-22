@@ -8,6 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { AllowedUserKey } from './user.type';
+import { AssignFeaturesToSpace } from '../space/space.input';
 
 @InputType()
 export class CreateUserInput {
@@ -33,6 +34,10 @@ export class CreateUserInput {
   @IsUUID('4', { each: true })
   @Field((type) => [ID], { defaultValue: [] })
   liked_spaces: string[];
+
+  @IsUUID('4', { each: true })
+  @Field((type) => [ID], { defaultValue: [] })
+  reviews: string[];
 }
 
 @InputType()
@@ -53,4 +58,15 @@ export class LikeSpaceInput {
   @IsUUID('4', { each: true })
   @Field()
   spaceId: string;
+}
+
+@InputType()
+export class AssignReviewInput {
+  @IsUUID('4', { each: true })
+  @Field((type) => ID)
+  userId: string;
+
+  @IsUUID('4', { each: true })
+  @Field((type) => ID)
+  reviewId: string;
 }

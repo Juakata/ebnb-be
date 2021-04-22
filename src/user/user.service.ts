@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { CreateUserInput, GetUserInput, LikeSpaceInput } from './user.input';
+import {
+  CreateUserInput,
+  GetUserInput,
+  LikeSpaceInput,
+  AssignReviewInput,
+} from './user.input';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
@@ -34,6 +39,13 @@ export class UserService {
       user.liked_spaces.push(spaceId);
     }
 
+    return this.userRepository.save(user);
+  }
+
+  async assignReview(assignReviewInput: AssignReviewInput): Promise<User> {
+    const { userId, reviewId } = assignReviewInput;
+    const user = await this.userRepository.findOne({ id: userId });
+    user.reviews = [...user.reviews, reviewId];
     return this.userRepository.save(user);
   }
 }

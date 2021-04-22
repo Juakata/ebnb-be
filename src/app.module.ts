@@ -8,6 +8,7 @@ import { Space } from './space/space.entity';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
 import { ReviewModule } from './review/review.module';
+import { Review } from './review/review.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { ReviewModule } from './review/review.module';
       url: 'mongodb://localhost/ebnb',
       synchronize: true,
       useUnifiedTopology: true,
-      entities: [Feature, Space, User],
+      entities: [Feature, Space, User, Review],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,

@@ -1,7 +1,7 @@
 import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class User {
+export class Review {
   @ObjectIdColumn()
   _id: string;
 
@@ -9,20 +9,11 @@ export class User {
   id: string;
 
   @Column()
-  name: string;
+  comment: string;
 
   @Column()
-  employee_code: string;
+  rate: number;
 
   @Column()
-  password: string;
-
-  @Column()
-  email: string;
-
-  @Column()
-  liked_spaces: string[];
-
-  @Column()
-  reviews: string[];
+  space: string;
 }
