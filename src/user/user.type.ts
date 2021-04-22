@@ -1,6 +1,7 @@
 import { Field, ID, registerEnumType, ObjectType } from '@nestjs/graphql';
 import { SpaceType } from '../space/space.type';
 import { ReviewType } from '../review/review.type';
+import { BookingType } from '../booking/booking.type';
 
 @ObjectType('User')
 export class UserType {
@@ -24,6 +25,9 @@ export class UserType {
 
   @Field((type) => [ReviewType])
   reviews: string[];
+
+  @Field((type) => [BookingType])
+  bookings: string[];
 }
 
 export enum AllowedUserKey {

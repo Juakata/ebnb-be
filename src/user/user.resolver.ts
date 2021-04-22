@@ -14,6 +14,9 @@ import { User } from './user.entity';
 import { ReviewService } from 'src/review/review.service';
 import { ReviewType } from '../review/review.type';
 import { CreateReviewInput } from '../review/review.input';
+import { BookingService } from '../booking/booking.service';
+import { BookingType } from '../booking/booking.type';
+import { CreateBookingInput } from '../booking/booking.input';
 
 @Resolver((of) => UserType)
 export class UserResolver {
@@ -21,6 +24,7 @@ export class UserResolver {
     private userService: UserService,
     private spaceService: SpaceService,
     private reviewService: ReviewService,
+    private bookingService: BookingService,
   ) {}
 
   @Query((returns) => UserType)
@@ -48,6 +52,16 @@ export class UserResolver {
     return review;
   }
 
+  @Mutation((returns) => BookingType)
+  async createBooking(
+    @Args('createBookingInput') createBookingInput: CreateBookingInput,
+  ) {
+    const { user_id } = createBookingInput;
+    const booking = await this.bookingService.createBooking(createBookingInput);
+    this.userService.assignBooking({ userId: user_id, bookingId: booking.id });
+    return booking;
+  }
+
   @ResolveField()
   async liked_spaces(@Parent() user: User) {
     return this.spaceService.getManySpaces(user.liked_spaces);
@@ -56,5 +70,10 @@ export class UserResolver {
   @ResolveField()
   async reviews(@Parent() user: User) {
     return this.reviewService.getManyReviews(user.reviews);
+  }
+
+  @ResolveField()
+  async bookings(@Parent() user: User) {
+    return this.bookingService.getManyBookings(user.bookings);
   }
 }

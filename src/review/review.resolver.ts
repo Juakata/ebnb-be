@@ -8,10 +8,8 @@ import {
 } from '@nestjs/graphql';
 import { ReviewType } from './review.type';
 import { ReviewService } from './review.service';
-import { CreateReviewInput } from './review.input';
 import { Review } from './review.entity';
 import { SpaceService } from '../space/space.service';
-import { UserService } from '../user/user.service';
 
 @Resolver((of) => ReviewType)
 export class ReviewResolver {

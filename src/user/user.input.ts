@@ -38,6 +38,10 @@ export class CreateUserInput {
   @IsUUID('4', { each: true })
   @Field((type) => [ID], { defaultValue: [] })
   reviews: string[];
+
+  @IsUUID('4', { each: true })
+  @Field((type) => [ID], { defaultValue: [] })
+  bookings: string[];
 }
 
 @InputType()
@@ -69,4 +73,15 @@ export class AssignReviewInput {
   @IsUUID('4', { each: true })
   @Field((type) => ID)
   reviewId: string;
+}
+
+@InputType()
+export class AssignBookingInput {
+  @IsUUID('4', { each: true })
+  @Field((type) => ID)
+  userId: string;
+
+  @IsUUID('4', { each: true })
+  @Field((type) => ID)
+  bookingId: string;
 }

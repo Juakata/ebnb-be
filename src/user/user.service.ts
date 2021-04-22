@@ -9,6 +9,7 @@ import {
   AssignReviewInput,
 } from './user.input';
 import { v4 as uuid } from 'uuid';
+import { AssignBookingInput } from './user.input';
 
 @Injectable()
 export class UserService {
@@ -46,6 +47,13 @@ export class UserService {
     const { userId, reviewId } = assignReviewInput;
     const user = await this.userRepository.findOne({ id: userId });
     user.reviews = [...user.reviews, reviewId];
+    return this.userRepository.save(user);
+  }
+
+  async assignBooking(assignBookingInput: AssignBookingInput): Promise<User> {
+    const { userId, bookingId } = assignBookingInput;
+    const user = await this.userRepository.findOne({ id: userId });
+    user.bookings.push(bookingId);
     return this.userRepository.save(user);
   }
 }
