@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { v4 as uuid } from 'uuid';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import {
   CreateUserInput,
@@ -8,7 +10,6 @@ import {
   LikeSpaceInput,
   AssignReviewInput,
 } from './user.input';
-import { v4 as uuid } from 'uuid';
 import { AssignBookingInput } from './user.input';
 
 @Injectable()
@@ -18,9 +19,12 @@ export class UserService {
   ) {}
 
   async createUser(createUserInput: CreateUserInput): Promise<User> {
+    const salt = await bcrypt.genSalt();
     const user = this.userRepository.create({
       id: uuid(),
       ...createUserInput,
+      password: await bcrypt.hash(createUserInput.password, salt),
+      salt,
     });
 
     return this.userRepository.save(user);

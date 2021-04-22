@@ -23,7 +23,7 @@ export class CreateUserInput {
 
   @IsEmail()
   @Field()
-  @Matches(/@elaniin/, { message: 'Only elaniin domain is allow' })
+  @Matches(/@elaniin\./, { message: 'Only elaniin domain is allow' })
   email: string;
 
   @MinLength(8)

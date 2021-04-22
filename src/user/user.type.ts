@@ -18,6 +18,9 @@ export class UserType {
   password: string;
 
   @Field()
+  salt: string;
+
+  @Field()
   email: string;
 
   @Field((type) => [SpaceType])

@@ -1,6 +1,8 @@
-import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ObjectIdColumn, PrimaryColumn, Unique } from 'typeorm';
 
 @Entity()
+@Unique(['email'])
+@Unique(['employee_code'])
 export class User {
   @ObjectIdColumn()
   _id: string;
@@ -16,6 +18,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column()
+  salt: string;
 
   @Column()
   email: string;
