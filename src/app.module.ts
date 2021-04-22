@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Feature } from './feature/feature.entity';
 import { SpaceModule } from './space/space.module';
 import { Space } from './space/space.entity';
+import { UserModule } from './user/user.module';
+import { User } from './user/user.entity';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -13,13 +16,15 @@ import { Space } from './space/space.entity';
       url: 'mongodb://localhost/ebnb',
       synchronize: true,
       useUnifiedTopology: true,
-      entities: [Feature, Space],
+      entities: [Feature, Space, User],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),
     FeatureModule,
     SpaceModule,
+    UserModule,
+    ReviewModule,
   ],
 })
 export class AppModule {}

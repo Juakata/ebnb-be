@@ -37,4 +37,14 @@ export class SpaceService {
     space.features = [...space.features, ...assignFeaturesToSpace.features];
     return this.spaceRepository.save(space);
   }
+
+  async getManySpaces(spaceIds: string[]): Promise<Space[]> {
+    return this.spaceRepository.find({
+      where: {
+        id: {
+          $in: spaceIds,
+        },
+      },
+    });
+  }
 }

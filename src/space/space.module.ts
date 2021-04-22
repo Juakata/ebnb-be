@@ -8,5 +8,6 @@ import { FeatureModule } from '../feature/feature.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Space]), FeatureModule],
   providers: [SpaceService, SpaceResolver],
+  exports: [SpaceService],
 })
 export class SpaceModule {}
