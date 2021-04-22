@@ -1,6 +1,6 @@
-import { Entity, ObjectIdColumn, PrimaryColumn, Column } from 'typeorm';
+import { Entity, ObjectIdColumn, PrimaryColumn, Column, Unique } from 'typeorm';
 import { AllowedType } from './space.type';
-
+@Unique(['name'])
 @Entity()
 export class Space {
   @ObjectIdColumn()
