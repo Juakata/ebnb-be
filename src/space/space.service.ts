@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Space } from './space.entity';
-import { CreateSpaceInput } from './space.input';
+import { CreateSpaceInput, AssignFeaturesToSpace } from './space.input';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
@@ -26,5 +26,15 @@ export class SpaceService {
 
   async getSpaceById(id: string): Promise<Space> {
     return this.spaceRepository.findOne({ id });
+  }
+
+  async assignFeatureToSpace(
+    assignFeaturesToSpace: AssignFeaturesToSpace,
+  ): Promise<Space> {
+    const space = await this.spaceRepository.findOne({
+      id: assignFeaturesToSpace.space_id,
+    });
+    space.features = [...space.features, ...assignFeaturesToSpace.features];
+    return this.spaceRepository.save(space);
   }
 }

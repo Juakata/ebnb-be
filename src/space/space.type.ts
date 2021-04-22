@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { FeatureType } from '../feature/feature.type';
 
 @ObjectType('Space')
 export class SpaceType {
@@ -19,6 +20,9 @@ export class SpaceType {
 
   @Field()
   capacity: number;
+
+  @Field((type) => [FeatureType])
+  features: string[];
 }
 
 export enum AllowedType {

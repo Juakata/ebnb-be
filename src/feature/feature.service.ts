@@ -29,4 +29,14 @@ export class FeatureService {
 
     return this.featureRepository.save(feature);
   }
+
+  async getManyFeatures(featuresIds: string[]): Promise<Feature[]> {
+    return this.featureRepository.find({
+      where: {
+        id: {
+          $in: featuresIds,
+        },
+      },
+    });
+  }
 }

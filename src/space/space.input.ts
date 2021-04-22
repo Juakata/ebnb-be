@@ -1,6 +1,14 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { MinLength, MaxLength } from 'class-validator';
+import { Field, ID, InputType } from '@nestjs/graphql';
+import {
+  MinLength,
+  MaxLength,
+  IsUUID,
+  IsNumber,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import { AllowedType } from './space.type';
+import { FeatureType } from '../feature/feature.type';
 
 @InputType()
 export class CreateSpaceInput {
@@ -17,9 +25,26 @@ export class CreateSpaceInput {
   @Field()
   place: string;
 
+  @IsUrl()
   @Field()
   image: string;
 
+  @IsNumber()
   @Field()
   capacity: number;
+
+  @IsUUID('4', { each: true })
+  @Field((type) => [ID], { defaultValue: [] })
+  features: string[];
+}
+
+@InputType()
+export class AssignFeaturesToSpace {
+  @IsUUID('4', { each: true })
+  @Field((type) => [ID])
+  features: string[];
+
+  @IsUUID()
+  @Field((type) => ID)
+  space_id: string;
 }

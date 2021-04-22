@@ -23,4 +23,7 @@ export class Space {
 
   @Column()
   capacity: number;
+
+  @Column()
+  features: string[];
 }
