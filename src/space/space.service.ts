@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Space } from './space.entity';
@@ -25,7 +25,11 @@ export class SpaceService {
   }
 
   async getSpaceById(id: string): Promise<Space> {
-    return this.spaceRepository.findOne({ id });
+    const space = this.spaceRepository.findOne({ id });
+    if (!space) {
+      throw new ConflictException(`Space with id: ${id} no found`);
+    }
+    return space;
   }
 
   async assignFeatureToSpace(
@@ -34,7 +38,11 @@ export class SpaceService {
     const space = await this.spaceRepository.findOne({
       id: assignFeaturesToSpace.space_id,
     });
-
+    if (!space) {
+      throw new ConflictException(
+        `Space with id: ${assignFeaturesToSpace.space_id} no found`,
+      );
+    }
     space.features = [
       ...new Set(...[...space.features, ...assignFeaturesToSpace.features]),
     ];

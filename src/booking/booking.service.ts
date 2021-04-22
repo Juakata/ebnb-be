@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Booking } from './booking.entity';
@@ -34,7 +34,10 @@ export class BookingService {
   }
 
   async getBooking(id: string): Promise<Booking> {
-    return this.bookingRepository.findOne({ id });
+    const booking = this.bookingRepository.findOne({ id });
+    if (!booking)
+      throw new ConflictException(`Booking with id: ${id} no found`);
+    return booking;
   }
 
   async getManyBookings(bookingIds: string[]): Promise<Booking[]> {

@@ -32,12 +32,20 @@ export class UserService {
 
   async getUser(getUserInput: GetUserInput): Promise<User> {
     const { key, value } = getUserInput;
-    return this.userRepository.findOne({ [key]: value });
+
+    const user = await this.userRepository.findOne({ [key]: value });
+    if (!user) {
+      throw new ConflictException(`User with ${key}: ${value} no found`);
+    }
+    return user;
   }
 
   async likeSpace(likeSpaceInput: LikeSpaceInput): Promise<User> {
     const { userId, spaceId } = likeSpaceInput;
     const user = await this.userRepository.findOne({ id: userId });
+    if (!user) {
+      throw new ConflictException(`User with id: ${userId} no found`);
+    }
     if (user.liked_spaces.includes(spaceId)) {
       user.liked_spaces = user.liked_spaces.filter((item) => item !== spaceId);
     } else {
@@ -50,8 +58,8 @@ export class UserService {
   async assignReview(assignReviewInput: AssignReviewInput): Promise<User> {
     const { userId, reviewId } = assignReviewInput;
     const user = await this.userRepository.findOne({ id: userId });
-    if (user.reviews.includes(reviewId)) {
-      throw new ConflictException('User has already this review id');
+    if (!user) {
+      throw new ConflictException(`User with id: ${userId} no found`);
     }
     user.reviews = [...user.reviews, reviewId];
     return this.userRepository.save(user);
@@ -60,9 +68,10 @@ export class UserService {
   async assignBooking(assignBookingInput: AssignBookingInput): Promise<User> {
     const { userId, bookingId } = assignBookingInput;
     const user = await this.userRepository.findOne({ id: userId });
-    if (user.bookings.includes(bookingId)) {
-      throw new ConflictException('User has already this booking id');
+    if (!user) {
+      throw new ConflictException(`User with id: ${userId} no found`);
     }
+
     user.bookings.push(bookingId);
     return this.userRepository.save(user);
   }

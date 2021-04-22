@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './review.entity';
 import { Repository } from 'typeorm';
@@ -24,7 +24,9 @@ export class ReviewService {
   }
 
   async getReview(id: string): Promise<Review> {
-    return this.reviewRepository.findOne({ id });
+    const review = this.reviewRepository.findOne({ id });
+    if (!review) throw new ConflictException(`Review with id: ${id} no found`);
+    return review;
   }
 
   async getManyReviews(reviewIds: string[]): Promise<Review[]> {

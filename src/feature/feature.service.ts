@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Feature } from './feature.entity';
@@ -11,8 +11,11 @@ export class FeatureService {
     @InjectRepository(Feature) private featureRepository: Repository<Feature>,
   ) {}
 
-  async getFeature(id): Promise<Feature> {
-    return this.featureRepository.findOne({ id });
+  async getFeature(id: string): Promise<Feature> {
+    const feature = this.featureRepository.findOne({ id });
+    if (!feature)
+      throw new ConflictException(`Feature with id: ${id} no found`);
+    return feature;
   }
 
   async getFeatures(): Promise<Feature[]> {
