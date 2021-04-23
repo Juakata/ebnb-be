@@ -33,6 +33,12 @@ export class UserType {
   bookings: string[];
 }
 
+@ObjectType('AccessToken')
+export class AccessTokenType {
+  @Field()
+  accessToken: string;
+}
+
 export enum AllowedUserKey {
   EMAIL = 'email',
   ID = 'id',

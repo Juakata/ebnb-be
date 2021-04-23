@@ -6,9 +6,14 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { UserType } from './user.type';
+import { UserType, AccessTokenType } from './user.type';
 import { UserService } from './user.service';
-import { CreateUserInput, GetUserInput, LikeSpaceInput } from './user.input';
+import {
+  CreateUserInput,
+  GetUserInput,
+  LikeSpaceInput,
+  SignInInput,
+} from './user.input';
 import { SpaceService } from '../space/space.service';
 import { User } from './user.entity';
 import { ReviewService } from 'src/review/review.service';
@@ -17,6 +22,8 @@ import { CreateReviewInput } from '../review/review.input';
 import { BookingService } from '../booking/booking.service';
 import { BookingType } from '../booking/booking.type';
 import { CreateBookingInput } from '../booking/booking.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from './user.guard';
 
 @Resolver((of) => UserType)
 export class UserResolver {
@@ -28,6 +35,7 @@ export class UserResolver {
   ) {}
 
   @Query((returns) => UserType)
+  @UseGuards(GqlAuthGuard)
   async user(@Args('getUserInput') getUserInput: GetUserInput) {
     return this.userService.getUser(getUserInput);
   }
@@ -38,11 +46,13 @@ export class UserResolver {
   }
 
   @Mutation((returns) => UserType)
+  @UseGuards(GqlAuthGuard)
   async likeSpace(@Args('likeSpaceInput') likeSpaceInput: LikeSpaceInput) {
     return this.userService.likeSpace(likeSpaceInput);
   }
 
   @Mutation((returns) => ReviewType)
+  @UseGuards(GqlAuthGuard)
   async createReview(
     @Args('createReviewInput') createReviewInput: CreateReviewInput,
   ) {
@@ -53,6 +63,7 @@ export class UserResolver {
   }
 
   @Mutation((returns) => BookingType)
+  @UseGuards(GqlAuthGuard)
   async createBooking(
     @Args('createBookingInput') createBookingInput: CreateBookingInput,
   ) {
@@ -60,6 +71,11 @@ export class UserResolver {
     const booking = await this.bookingService.createBooking(createBookingInput);
     this.userService.assignBooking({ userId: user_id, bookingId: booking.id });
     return booking;
+  }
+
+  @Query((returns) => AccessTokenType)
+  signIn(@Args('signInInput') signInInput: SignInInput) {
+    return this.userService.signIn(signInInput);
   }
 
   @ResolveField()

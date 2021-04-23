@@ -1,7 +1,12 @@
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import {
@@ -9,13 +14,16 @@ import {
   GetUserInput,
   LikeSpaceInput,
   AssignReviewInput,
+  SignInInput,
 } from './user.input';
 import { AssignBookingInput } from './user.input';
+import { AllowedUserKey } from './user.type';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private jwtService: JwtService,
   ) {}
 
   async createUser(createUserInput: CreateUserInput): Promise<User> {
@@ -38,6 +46,25 @@ export class UserService {
       throw new ConflictException(`User with ${key}: ${value} no found`);
     }
     return user;
+  }
+
+  async signIn(signInInput: SignInInput): Promise<{ accessToken: string }> {
+    const { employee_code, password } = signInInput;
+    const user = await this.getUser({
+      key: AllowedUserKey.EMPLOYEE_CODE,
+      value: employee_code,
+    });
+
+    if (!user || !(await user.validatePassword(password))) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const accessToken = await this.jwtService.sign({
+      employee_code,
+      id: user.id,
+      email: user.email,
+    });
+    return { accessToken };
   }
 
   async likeSpace(likeSpaceInput: LikeSpaceInput): Promise<User> {

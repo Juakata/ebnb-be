@@ -2,6 +2,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FeatureType } from './feature.type';
 import { FeatureService } from './feature.service';
 import { CreateFeatureInput } from './feature.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../user/user.guard';
 
 @Resolver((of) => FeatureType)
 export class FeatureResolver {
@@ -18,6 +20,7 @@ export class FeatureResolver {
   }
 
   @Mutation((returns) => FeatureType)
+  @UseGuards(GqlAuthGuard)
   createFeature(
     @Args('createFeatureInput') createFeatureInput: CreateFeatureInput,
   ) {

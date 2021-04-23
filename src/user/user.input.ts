@@ -8,7 +8,6 @@ import {
   MinLength,
 } from 'class-validator';
 import { AllowedUserKey } from './user.type';
-import { AssignFeaturesToSpace } from '../space/space.input';
 
 @InputType()
 export class CreateUserInput {
@@ -84,4 +83,13 @@ export class AssignBookingInput {
   @IsUUID('4', { each: true })
   @Field((type) => ID)
   bookingId: string;
+}
+
+@InputType()
+export class SignInInput {
+  @Field()
+  employee_code: string;
+
+  @Field()
+  password: string;
 }

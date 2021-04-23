@@ -11,6 +11,8 @@ import { SpaceType } from './space.type';
 import { AssignFeaturesToSpace, CreateSpaceInput } from './space.input';
 import { Space } from './space.entity';
 import { FeatureService } from '../feature/feature.service';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../user/user.guard';
 
 @Resolver((of) => SpaceType)
 export class SpaceResolver {
@@ -30,6 +32,7 @@ export class SpaceResolver {
   }
 
   @Mutation((returns) => SpaceType)
+  @UseGuards(GqlAuthGuard)
   async createSpace(
     @Args('createSpaceInput') createSpaceInput: CreateSpaceInput,
   ) {
@@ -37,6 +40,7 @@ export class SpaceResolver {
   }
 
   @Mutation((returns) => SpaceType)
+  @UseGuards(GqlAuthGuard)
   assignFeaturesToSpace(
     @Args('assignFeaturesToSpace') assignFeaturesToSpace: AssignFeaturesToSpace,
   ) {
