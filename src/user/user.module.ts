@@ -9,9 +9,11 @@ import { SpaceModule } from '../space/space.module';
 import { ReviewModule } from '../review/review.module';
 import { BookingModule } from '../booking/booking.module';
 import { JwtStrategy } from './jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
