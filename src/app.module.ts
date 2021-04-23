@@ -11,12 +11,14 @@ import { ReviewModule } from './review/review.module';
 import { Review } from './review/review.entity';
 import { BookingModule } from './booking/booking.module';
 import { Booking } from './booking/booking.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: 'mongodb://localhost/ebnb',
+      url: `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@cluster0.2eijv.mongodb.net/test`,
       synchronize: true,
       useUnifiedTopology: true,
       entities: [Feature, Space, User, Review, Booking],

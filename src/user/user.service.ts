@@ -40,7 +40,6 @@ export class UserService {
 
   async getUser(getUserInput: GetUserInput): Promise<User> {
     const { key, value } = getUserInput;
-
     const user = await this.userRepository.findOne({ [key]: value });
     if (!user) {
       throw new ConflictException(`User with ${key}: ${value} no found`);
