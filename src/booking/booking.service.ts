@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Booking } from './booking.entity';
@@ -36,7 +36,7 @@ export class BookingService {
   async getBooking(id: string): Promise<Booking> {
     const booking = this.bookingRepository.findOne({ id });
     if (!booking)
-      throw new ConflictException(`Booking with id: ${id} no found`);
+      throw new NotFoundException(`Booking with id: ${id} no found`);
     return booking;
   }
 
